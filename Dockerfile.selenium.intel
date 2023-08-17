@@ -1,0 +1,33 @@
+ARG SELENIUM_IMAGE_TAG=latest
+# For more information, see: https://hub.docker.com/r/selenium/standalone-firefox
+FROM selenium/standalone-firefox:${SELENIUM_IMAGE_TAG}
+
+ARG PRIVATE_PYTHON_MODULES_GROUP
+ARG PYTHON_VERSION=3.11
+
+USER root
+RUN apt-get update \
+    && apt-get -qqy --no-install-recommends install \
+    software-properties-common \
+    && add-apt-repository ppa:deadsnakes \
+    && apt-get -qqy update \
+    && apt-get -qqy --no-install-recommends install \
+    python$PYTHON_VERSION \
+    python$PYTHON_VERSION-distutils \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 1
+
+COPY . /app/
+
+RUN chown -R 1200:1201 /app
+
+ENV PYTHONPATH="/app:${PYTHONPATH}"
+
+ARG GITLAB_TOKEN
+RUN pip3 install --no-cache-dir --extra-index-url=$(PRIVATE_PYTHON_MODULES_GROUP) -r /app/requirements.txt
+
+WORKDIR /app
+
+CMD ["python", "-m", "pytest", "tests"]
