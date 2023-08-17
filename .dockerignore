@@ -1,0 +1,32 @@
+# Exclude files and directories generated during development
+README.md
+Makefile
+
+# Exclude version control system directories
+.git
+.svn
+
+# Exclude project-specific files
+Dockerfile
+docker-compose.yml
+
+# Exclude editor and IDE-specific files
+.vscode/
+.idea/
+.history/
+
+# Exclude build and output files
+build/
+dist/
+out/
+*.log
+
+# Exclude configuration files that might contain sensitive information
+config.json
+secrets.json
+
+# Exclude any other temporary or unnecessary files
+*.tmp
+*.swp
+*.DS_Store
+Thumbs.db
