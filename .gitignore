@@ -1,0 +1,5 @@
+.history
+.venv
+.out
+__pycache__
+geckodriver.log
