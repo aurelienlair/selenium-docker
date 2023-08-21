@@ -90,8 +90,8 @@ run-tests-locally: ## ✅🧪   Running tests on Firefox locally
 
 run-tests-intel: ## ✅🧪   Running tests on Firefox on Intel platform
 	@echo "✅🧪 Running tests on Firefox on Intel platform"
-	docker run --platform=linux/amd64 $(RUN_TESTS_OPTIONS)
+	docker run $(RUN_TESTS_OPTIONS)
 
 run-tests-arm: ## ✅🧪   Running tests on Firefox on ARM platform
 	@echo "✅🧪 Running tests on Firefox on ARM platform"
-	docker run --rm --platform=linux/arm64 $(RUN_TESTS_OPTIONS)
+	docker run $(RUN_TESTS_OPTIONS)
