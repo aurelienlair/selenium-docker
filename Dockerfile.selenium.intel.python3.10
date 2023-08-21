@@ -2,7 +2,6 @@ ARG SELENIUM_IMAGE_TAG=latest
 # For more information, see: https://hub.docker.com/r/selenium/standalone-firefox
 FROM selenium/standalone-firefox:${SELENIUM_IMAGE_TAG}
 
-ARG PRIVATE_PYTHON_MODULES_GROUP
 ARG PYTHON_VERSION=3.11
 
 USER root
@@ -25,8 +24,8 @@ RUN chown -R 1200:1201 /app
 
 ENV PYTHONPATH="/app:${PYTHONPATH}"
 
-ARG GITLAB_TOKEN
-RUN pip3 install --no-cache-dir --extra-index-url=$(PRIVATE_PYTHON_MODULES_GROUP) -r /app/requirements.txt
+ARG PRIVATE_PYTHON_MODULES_GROUPN
+RUN pip3 install --no-cache-dir --extra-index-url=${PRIVATE_PYTHON_MODULES_GROUP} -r /app/requirements.txt
 
 WORKDIR /app
 
