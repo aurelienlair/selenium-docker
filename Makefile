@@ -9,6 +9,7 @@ GITLAB_PERSONAL_ACCESS_TOKEN ?= $(error GITLAB_PERSONAL_ACCESS_TOKEN is not set)
 PRIVATE_PYTHON_MODULES_GROUP_HOST ?= $(error PRIVATE_PYTHON_MODULES_GROUP_HOST is not set)
 PRIVATE_PYTHON_MODULES_GROUP = https://__token__:$(GITLAB_PERSONAL_ACCESS_TOKEN)@$(PRIVATE_PYTHON_MODULES_GROUP_HOST)
 PYTHON_VERSION ?= 3.11
+IMAGE_TAG_NAME = selenium-firefox-python
 
 export PIPENV_VENV_IN_PROJECT=true
 
@@ -19,31 +20,28 @@ help:
 # Common build arguments
 BUILD_ARGS = \
 	--progress=plain \
-	--tag selenium-firefox-standalone \
+	--tag $(IMAGE_TAG_NAME) \
 	--build-arg SELENIUM_IMAGE_TAG=$(SELENIUM_IMAGE_TAG) \
-	--build-arg GITLAB_TOKEN=$(GITLAB_PERSONAL_ACCESS_TOKEN) \
 	--build-arg PRIVATE_PYTHON_MODULES_GROUP=$(PRIVATE_PYTHON_MODULES_GROUP) \
 	--build-arg PYTHON_VERSION=$(PYTHON_VERSION)
 
 # Common run tests options
 RUN_TESTS_OPTIONS = \
 	--rm \
-	--platform linux/amd64 \
-	selenium-firefox-standalone pytest -s -v tests
+	$(IMAGE_TAG_NAME) pytest -s -v tests
 
 .PHONY: build bash echo-requirements firefox-version
 
 build: ## 🛠️      Build docker image using default Dockerfile
 	@echo "🔨 Building docker image using default Dockerfile"
-	docker build $(BUILD_ARGS) -f $(DOCKERFILE) .
 
 bash: ## 💻     Bash
 	@echo "🐚 Running Bash"
-	docker run --interactive --tty --rm selenium-firefox-standalone bash 
+	docker run --interactive --tty --rm selenium-firefox bash
 
 echo-requirements: ## 🔍     Echo requirements
 	@echo "🔎 Echoing requirements"
-	docker run --rm selenium-firefox-standalone bash -c 'cat /app/requirements.txt' 
+	docker run --rm $(IMAGE_TAG_NAME) bash -c 'cat /app/requirements.txt'
 
 create-virtual-env: ## 🛠️        Create Python virtual environment
 	@echo "🌐 installing python virtual environment"
@@ -63,7 +61,7 @@ install-dependencies: ## 🔌       Install Python dependencies
 
 firefox-version: ## 🏃     Echo Firefox version 
 	@echo "🦊 Echoing Firefox version"
-	docker run --rm selenium-firefox-standalone bash -c 'firefox --version'
+	docker run --rm $(IMAGE_TAG_NAME) bash -c 'firefox --version'
 
 # Additional build targets
 build-selenium-intel-venv: ## 🛠️      Build docker image for build-selenium-intel-venv
