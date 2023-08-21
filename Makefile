@@ -64,6 +64,17 @@ firefox-version: ## 🏃     Echo Firefox version
 	@echo "🦊 Echoing Firefox version"
 	docker run --rm $(IMAGE_TAG_NAME) bash -c 'firefox --version'
 
+build-debian-intel: ## 🛠️      Build docker image for build-debian-intel
+	@echo "🔨 Building docker image for build-debian-intel"
+	docker build \
+		--progress=plain \
+		--platform linux/amd64 \
+		--tag $(IMAGE_TAG_NAME) \
+		--build-arg FIREFOX_VERSION=116.0 \
+		--build-arg GECKODRIVER_VERSION=0.33.0 \
+		--build-arg PRIVATE_PYTHON_MODULES_GROUP=$(PRIVATE_PYTHON_MODULES_GROUP) \
+		--file Dockerfile.intel .
+
 build-selenium-intel-venv: ## 🛠️      Build docker image for build-selenium-intel-venv
 	@echo "🔨 Building docker image for build-selenium-intel-venv"
 	$(MAKE) build --platform linux/amd64 DOCKERFILE=$(DOCKERFILE).selenium.intel.venv SELENIUM_IMAGE_TAG=116.0
