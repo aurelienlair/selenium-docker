@@ -38,7 +38,7 @@ build: ## 🛠️      Build docker image using default Dockerfile
 
 bash: ## 💻     Bash
 	@echo "🐚 Running Bash"
-	docker run --interactive --tty --rm selenium-firefox bash
+	docker run --interactive --tty --rm $(IMAGE_TAG_NAME) bash
 
 echo-requirements: ## 🔍     Echo requirements
 	@echo "🔎 Echoing requirements"
