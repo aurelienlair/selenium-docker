@@ -1,0 +1,33 @@
+ARG ALPINE_VERSION=latest
+# https://hub.docker.com/_/python/tags?page=1&name=alpine
+FROM python:alpine${ALPINE_VERSION}
+ARG FIREFOX_VERSION=115.0.3-r0	
+ARG GECKODRIVER_VERSION=0.33.0
+ARG PYTHON_VERSION=3.11
+
+# https://pkgs.alpinelinux.org/packages?name=+firefox-esr&branch=edge
+# https://github.com/mozilla/geckodriver
+RUN apk add --no-cache \
+        firefox-esr=${FIREFOX_VERSION} \
+        curl \
+        gcc \
+        libc-dev \
+        linux-headers \
+        libffi-dev \
+        bash \
+    && curl -Lo /usr/local/bin/geckodriver \
+        https://github.com/mozilla/geckodriver/releases/download/v${GECKODRIVER_VERSION}/geckodriver-v${GECKODRIVER_VERSION}-linux64 \
+    && chmod +x /usr/local/bin/geckodriver \
+    && rm -rf /var/cache/apk/* 
+
+COPY . /app/
+
+ENV PYTHONPATH="/app:${PYTHONPATH}"
+
+# Not working because of https://github.com/oracle/python-oracledb/issues/204
+ARG PRIVATE_PYTHON_MODULES_GROUP
+RUN pip3 install --no-cache-dir --extra-index-url=${PRIVATE_PYTHON_MODULES_GROUP} -r /app/requirements.txt
+
+WORKDIR /app
+
+CMD ["python", "-m", "pytest", "tests"]
