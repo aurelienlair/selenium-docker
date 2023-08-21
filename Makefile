@@ -34,6 +34,7 @@ RUN_TESTS_OPTIONS = \
 
 build: ## 🛠️      Build docker image using default Dockerfile
 	@echo "🔨 Building docker image using default Dockerfile"
+	docker build $(BUILD_ARGS) --file $(DOCKERFILE) .
 
 bash: ## 💻     Bash
 	@echo "🐚 Running Bash"
