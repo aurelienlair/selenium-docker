@@ -28,7 +28,7 @@ BUILD_ARGS = \
 # Common run tests options
 RUN_TESTS_OPTIONS = \
 	--rm \
-	$(IMAGE_TAG_NAME) pytest -s -v tests
+	$(IMAGE_TAG_NAME)
 
 .PHONY: build bash echo-requirements firefox-version
 
