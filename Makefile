@@ -64,18 +64,17 @@ firefox-version: ## 🏃     Echo Firefox version
 	@echo "🦊 Echoing Firefox version"
 	docker run --rm $(IMAGE_TAG_NAME) bash -c 'firefox --version'
 
-# Additional build targets
 build-selenium-intel-venv: ## 🛠️      Build docker image for build-selenium-intel-venv
 	@echo "🔨 Building docker image for build-selenium-intel-venv"
-	$(MAKE) build DOCKERFILE=$(DOCKERFILE).selenium.intel.venv SELENIUM_IMAGE_TAG=116.0
+	$(MAKE) build --platform linux/amd64 DOCKERFILE=$(DOCKERFILE).selenium.intel.venv SELENIUM_IMAGE_TAG=116.0
 
 build-selenium-intel: ## 🛠️      Build docker image for build-selenium-intel 
 	@echo "🔨 Building docker image for build-selenium-intel"
-	$(MAKE) build DOCKERFILE=$(DOCKERFILE).selenium.intel
+	$(MAKE) build --platform linux/amd64 DOCKERFILE=$(DOCKERFILE).selenium.intel
 
 build-selenium-arm-venv: ## 🛠️      Build docker image for build-selenium-arm-venv
 	@echo "🔨 Building docker image for build-selenium-arm-venv"
-	$(MAKE) build DOCKERFILE=$(DOCKERFILE).selenium.arm.venv
+	$(MAKE) build --platform linux/arm64 DOCKERFILE=$(DOCKERFILE).selenium.arm.venv
 
 build-selenium-arm: ## 🛠️      Build docker image for build-selenium-arm
 	@echo "🔨 Building docker image for build-selenium-arm"
@@ -83,7 +82,7 @@ build-selenium-arm: ## 🛠️      Build docker image for build-selenium-arm
 
 build-selenium-intel-python3.10: ## 🛠️     Build docker image for build-selenium-intel-python3.10
 	@echo "🔨 Building docker image for build-selenium-intel-python3.10"
-	$(MAKE) build DOCKERFILE=$(DOCKERFILE).selenium.intel.python3.10 PYTHON_VERSION=3.10
+	$(MAKE) build --platform linux/amd64 DOCKERFILE=$(DOCKERFILE).selenium.intel.python3.10 PYTHON_VERSION=3.10
 
 run-tests-locally: ## ✅🧪   Running tests on Firefox locally 
 	@echo "✅🧪 Running tests on Firefox locally"
@@ -91,8 +90,8 @@ run-tests-locally: ## ✅🧪   Running tests on Firefox locally
 
 run-tests-intel: ## ✅🧪   Running tests on Firefox on Intel platform
 	@echo "✅🧪 Running tests on Firefox on Intel platform"
-	docker run $(RUN_TESTS_OPTIONS)
+	docker run --platform=linux/amd64 $(RUN_TESTS_OPTIONS)
 
 run-tests-arm: ## ✅🧪   Running tests on Firefox on ARM platform
 	@echo "✅🧪 Running tests on Firefox on ARM platform"
-	docker run --rm --platform linux/arm64 $(RUN_TESTS_OPTIONS)
+	docker run --rm --platform=linux/arm64 $(RUN_TESTS_OPTIONS)
