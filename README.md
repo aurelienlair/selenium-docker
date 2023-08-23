@@ -27,7 +27,7 @@ Please follow the links provided for each tool to access the respective installa
 Before you start setting up the project, make sure you have the following environment variables set:
 
 * `GITLAB_PERSONAL_ACCESS_TOKEN`: Your GitLab private token for authentication.
-* `PRIVATE_PYTHON_MODULES_GROUP_HOST`: The host of the private Python libraries in GitLab, e.g., PRIVATE_HOST/api/v4/groups/GROUP_ID/-/packages/pypi/simple.
+* `PRIVATE_PYTHON_MODULES_GROUP_HOST`: The host of the private Python libraries in GitLab, e.g., if your host is `https://PRIVATE_HOST/api/v4/groups/GROUP_ID/-/packages/pypi/simple`, you need to set an environment variable with `PRIVATE_HOST/api/v4/groups/GROUP_ID/-/packages/pypi/simple`.
 
 ## Installation
 
