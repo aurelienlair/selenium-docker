@@ -24,7 +24,7 @@ RUN chown -R 1200:1201 /app
 
 ENV PYTHONPATH="/app:${PYTHONPATH}"
 
-ARG PRIVATE_PYTHON_MODULES_GROUPN
+ARG PRIVATE_PYTHON_MODULES_GROUP
 RUN pip3 install --no-cache-dir --extra-index-url=${PRIVATE_PYTHON_MODULES_GROUP} -r /app/requirements.txt
 
 WORKDIR /app
