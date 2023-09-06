@@ -11,12 +11,11 @@ RUN apt-get update \
     && add-apt-repository ppa:deadsnakes \
     && apt-get -qqy update \
     && apt-get -qqy --no-install-recommends install \
-    python$PYTHON_VERSION \
-    python$PYTHON_VERSION-distutils \
+    python${PYTHON_VERSION} \
+    python${PYTHON_VERSION}-distutils \
     python3-pip \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 1
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/* \
+    && update-alternatives --install /usr/bin/python python /usr/bin/python${PYTHON_VERSION} 1
 
 COPY . /app/
 
