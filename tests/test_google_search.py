@@ -53,7 +53,7 @@ def test_google_search(setup):
     search_box = driver.find_element(by=By.NAME, value='q')
     search_box.send_keys('Automation step by step')
     search_box.send_keys(Keys.RETURN)
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 40)
     wait.until(EC.title_is("Automation step by step - Google Search"))
 
     search_results = driver.find_elements(By.XPATH, "//div[@class='tF2Cxc']")
