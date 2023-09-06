@@ -30,4 +30,4 @@ RUN pip3 install --no-cache-dir --extra-index-url=${PRIVATE_PYTHON_MODULES_GROUP
 
 WORKDIR /app
 
-CMD ["python", "-m", "pytest", "tests"]
+CMD ["python3", "-m", "pytest", "tests"]

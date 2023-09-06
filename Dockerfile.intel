@@ -60,4 +60,4 @@ ENV PATH="/app:${PATH}"
 ARG PRIVATE_PYTHON_MODULES_GROUP
 RUN pip3 install --no-cache-dir --extra-index-url=${PRIVATE_PYTHON_MODULES_GROUP} -r /app/requirements.txt
 
-CMD ["python", "-m", "pytest", "tests"]
+CMD ["python3", "-m", "pytest", "tests"]
