@@ -2,21 +2,15 @@ ARG SELENIUM_IMAGE_TAG=latest
 # For more information, see: https://hub.docker.com/r/selenium/standalone-firefox
 FROM selenium/standalone-firefox:${SELENIUM_IMAGE_TAG}
 
-ARG PYTHON_VERSION=3.11
-
 USER root
 RUN apt-get update \
     && apt-get -qqy --no-install-recommends install \
     software-properties-common \
-    && add-apt-repository ppa:deadsnakes \
     && apt-get -qqy update \
     && apt-get -qqy --no-install-recommends install \
-    python$PYTHON_VERSION \
-    python$PYTHON_VERSION-distutils \
+    python \
     python3-pip \
-    && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
-
-RUN update-alternatives --install /usr/bin/python python /usr/bin/python$PYTHON_VERSION 1
+    && rm -rf /var/lib/apt/lists/* /var/cache/apt/* 
 
 COPY . /app/
 
