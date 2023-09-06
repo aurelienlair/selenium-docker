@@ -18,91 +18,55 @@ help:
 	@grep -E '^[a-zA-Z_-]+.*?## .*$$' Makefile | sed 's/:.*##/##/' | sort | awk 'BEGIN {FS = "## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 # Common build arguments
-BUILD_ARGS = \
+COMMON_BUILD_ARGS = \
 	--progress=plain \
 	--tag $(IMAGE_TAG_NAME) \
 	--build-arg SELENIUM_IMAGE_TAG=$(SELENIUM_IMAGE_TAG) \
 	--build-arg PRIVATE_PYTHON_MODULES_GROUP=$(PRIVATE_PYTHON_MODULES_GROUP) \
-	--build-arg PYTHON_VERSION=$(PYTHON_VERSION)
 
 # Common run tests options
 RUN_TESTS_OPTIONS = \
+	-it \
 	--rm \
 	$(IMAGE_TAG_NAME)
 
-.PHONY: build bash echo-requirements firefox-version
+.PHONY: bash echo-requirements firefox-version
 
-build: ## 🛠️      Build docker image using default Dockerfile
-	@echo "🔨 Building docker image using default Dockerfile"
-	docker build $(BUILD_ARGS) --file $(DOCKERFILE) .
-
-bash: ## 💻     Bash
-	@echo "🐚 Running Bash"
-	docker run --interactive --tty --rm $(IMAGE_TAG_NAME) bash
-
-echo-requirements: ## 🔍     Echo requirements
-	@echo "🔎 Echoing requirements"
-	docker run --rm $(IMAGE_TAG_NAME) bash -c 'cat /app/requirements.txt'
-
-create-virtual-env: ## 🛠️        Create Python virtual environment
-	@echo "🌐 installing python virtual environment"
-	python3 -m venv .venv
-
-activate-virtual-env: ## 🔌      Activate Python virtual environment
-	@echo "🔌 activating python virtual environment"
-	. .venv/bin/activate
-
-remove-virtual-env: ## 🗑️      Remove Python virtual environment
-	@echo "🧹️ Activating the Python virtual environment"
-	rm -rf .venv/
-
-install-dependencies: ## 🔌       Install Python dependencies
-	@echo "🧹️ Installing Python dependencies"
-	pip install --no-cache-dir --extra-index-url=$(PRIVATE_PYTHON_MODULES_GROUP) -r requirements.txt
-
-firefox-version: ## 🏃     Echo Firefox version 
-	@echo "🦊 Echoing Firefox version"
-	docker run --rm $(IMAGE_TAG_NAME) bash -c 'firefox --version'
-
-build-debian-intel: ## 🛠️      Build docker image for build-debian-intel
-	@echo "🔨 Building docker image for build-debian-intel"
+define build_platform_target
+build-$(1):	##  🛠️      Build docker image (eg. make build-selenium-intel-venv, make build-selenium-intel, make build-selenium-arm-venv, make build-selenium-arm)
+	@echo "🔨 Building docker image for `$(1)` using file `$(2)` for platform `$(3)`"
 	docker build \
-		--progress=plain \
-		--platform linux/amd64 \
-		--tag $(IMAGE_TAG_NAME) \
-		--build-arg FIREFOX_VERSION=116.0 \
-		--build-arg GECKODRIVER_VERSION=0.33.0 \
-		--build-arg PRIVATE_PYTHON_MODULES_GROUP=$(PRIVATE_PYTHON_MODULES_GROUP) \
-		--file Dockerfile.intel .
+		$(COMMON_BUILD_ARGS) \
+		--build-arg PYTHON_VERSION=$(PYTHON_VERSION) \
+		--file $(2) \
+		--platform $(3) \
+		.
+endef
 
-build-selenium-intel-venv: ## 🛠️      Build docker image for build-selenium-intel-venv
-	@echo "🔨 Building docker image for build-selenium-intel-venv"
-	$(MAKE) build --platform linux/amd64 DOCKERFILE=$(DOCKERFILE).selenium.intel.venv SELENIUM_IMAGE_TAG=116.0
+# Call the build_platform_target function for each platform
+$(eval $(call build_platform_target,selenium-intel-venv,Dockerfile.selenium.intel.venv,linux/amd64))
+$(eval $(call build_platform_target,selenium-intel,Dockerfile.selenium.intel,linux/amd64))
+$(eval $(call build_platform_target,selenium-arm-venv,Dockerfile.selenium.arm.venv,linux/arm64))
+$(eval $(call build_platform_target,selenium-arm,Dockerfile.selenium.arm,linux/arm64))
 
-build-selenium-intel: ## 🛠️      Build docker image for build-selenium-intel 
-	@echo "🔨 Building docker image for build-selenium-intel"
-	$(MAKE) build --platform linux/amd64 DOCKERFILE=$(DOCKERFILE).selenium.intel
 
-build-selenium-arm-venv: ## 🛠️      Build docker image for build-selenium-arm-venv
-	@echo "🔨 Building docker image for build-selenium-arm-venv"
-	$(MAKE) build --platform linux/arm64 DOCKERFILE=$(DOCKERFILE).selenium.arm.venv
-
-build-selenium-arm: ## 🛠️      Build docker image for build-selenium-arm
-	@echo "🔨 Building docker image for build-selenium-arm"
-	$(MAKE) build DOCKERFILE=$(DOCKERFILE).selenium.arm
-
-build-selenium-intel-python3.10: ## 🛠️     Build docker image for build-selenium-intel-python3.10
+build-selenium-intel-python3.10: ## 🛠️      Build docker image for build-selenium-intel-python3.10
 	@echo "🔨 Building docker image for build-selenium-intel-python3.10"
-	$(MAKE) build --platform linux/amd64 DOCKERFILE=$(DOCKERFILE).selenium.intel.python3.10 PYTHON_VERSION=3.10
+	docker build \
+		$(COMMON_BUILD_ARGS) \
+		--build-arg PYTHON_VERSION=3.10 \
+		--file Dockerfile.selenium.intel.python3.10 \
+		--platform linux/amd64 \
+		.
 
-run-tests-locally: ## ✅🧪   Running tests on Firefox locally 
-	@echo "✅🧪 Running tests on Firefox locally"
+run-tests-locally: ##  ✅🧪   Running tests on Firefox locally 
+	@echo "✅🧪 Running tests on Firefox"
 	pytest -s -v tests
 
-run-tests-intel: ## ✅🧪   Running tests on Firefox on Intel platform
-	@echo "✅🧪 Running tests on Firefox on Intel platform"
+run-tests: ##  ✅🧪   Running tests on Firefox
+	@echo "✅🧪 Running tests on Firefox "
 	docker run $(RUN_TESTS_OPTIONS)
 
-run-tests-arm: ## ✅🧪   Running tests on Firefox on ARM platform
-	@echo "✅🧪 Running tests on Firefox on ARM platform"
-	docker run $(RUN_TESTS_OPTIONS)
+run-tests-with-entrypoint: ##  ✅🧪   Running tests on Firefox by specifying the entrypoint
+	@echo "✅🧪 Running tests on Firefox "
+	docker run $(RUN_TESTS_OPTIONS) python3 -m pytest tests
