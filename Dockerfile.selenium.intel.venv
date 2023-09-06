@@ -18,6 +18,7 @@ RUN apt-get update \
     && update-alternatives --install /usr/bin/python python /usr/bin/python${PYTHON_VERSION} 1
 
 COPY . /app/
+
 RUN chown -R 1200:1201 /app
 
 USER seluser
