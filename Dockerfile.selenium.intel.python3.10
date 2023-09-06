@@ -29,4 +29,5 @@ RUN pip3 install --no-cache-dir --extra-index-url=${PRIVATE_PYTHON_MODULES_GROUP
 
 WORKDIR /app
 
+USER seluser
 CMD ["python3", "-m", "pytest", "tests"]
