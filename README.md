@@ -71,17 +71,14 @@ make run-tests-locally
 
 ### Inside a Docker Container 🐳
 
-Select the image type you wish to create using the helper tool 👷‍♂️
+Select the image type you wish to create 👷‍♂️
 
 ```bash
-make help | grep build
-
-build                           🛠️  Build docker image using default Dockerfile
-build-selenium-arm              🛠️  Build docker image for build-selenium-arm
-build-selenium-arm-venv         🛠️  Build docker image for build-selenium-arm-venv
-build-selenium-intel            🛠️  Build docker image for build-selenium-intel 
-build-selenium-intel-python3.10 🛠️  Build docker image for build-selenium-intel-python3.10
-build-selenium-intel-venv       🛠️  Build docker image for build-selenium-intel-venv
+make build-selenium-arm              🛠️  Build docker image for build-selenium-arm
+make build-selenium-arm-venv         🛠️  Build docker image for build-selenium-arm-venv
+make build-selenium-intel            🛠️  Build docker image for build-selenium-intel 
+make build-selenium-intel-python3.10 🛠️  Build docker image for build-selenium-intel-python3.10
+make build-selenium-intel-venv       🛠️  Build docker image for build-selenium-intel-venv
 ```
 
 Execute the command, specifying your intention to construct and launch a Docker image based on [Intel](https://en.wikipedia.org/wiki/X86-64) architecture 🏗️🐳.
@@ -90,15 +87,21 @@ Execute the command, specifying your intention to construct and launch a Docker 
 make build-selenium-intel 
 ```
 
-Then simply initiate the tests 🚀
-
-```bash
-make run-tests-intel
-```
-
 You can achieve the same by building and running a Docker image based on the [ARM64](https://en.wikipedia.org/wiki/AArch64) architecture, as demonstrated below:
 
 ```bash
 make build-selenium-arm
 make run-tests-arm
 ```
+
+Then simply initiate the tests 🚀
+
+```bash
+make run-tests
+```
+
+You can also use it to execute a test with a custom docker [entrypoint](https://docs.docker.com/engine/reference/builder/#entrypoint), such as activating a virtual environment before running the tests.
+
+```bash
+make run-tests-with-entrypoint
+````
