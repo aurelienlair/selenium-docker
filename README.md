@@ -74,14 +74,15 @@ make run-tests-locally
 Select the image type you wish to create 👷‍♂️
 
 ```bash
-make build-selenium-arm              🛠️  Build docker image for build-selenium-arm
-make build-selenium-arm-venv         🛠️  Build docker image for build-selenium-arm-venv
-make build-selenium-intel            🛠️  Build docker image for build-selenium-intel 
-make build-selenium-intel-python3.10 🛠️  Build docker image for build-selenium-intel-python3.10
-make build-selenium-intel-venv       🛠️  Build docker image for build-selenium-intel-venv
+make build-selenium-arm              🛠️  Build docker image for a selenium arm version
+make build-selenium-arm-venv         🛠️  Build docker image for a selenium arm version with a python virtual environment
+make build-debian-intel              🛠️  Build docker image for a debian intel version
+make build-selenium-intel            🛠️  Build docker image for a selenium intel version
+make build-selenium-intel-python3.10 🛠️  Build docker image for a selenium intel version with python 3.10
+make build-selenium-intel-venv       🛠️  Build docker image for a selenium intel version with a python virtual environment 
 ```
 
-Execute the command, specifying your intention to construct and launch a Docker image based on [Intel](https://en.wikipedia.org/wiki/X86-64) architecture 🏗️🐳.
+Execute the command, specifying your intention to build and launch a Docker image based on [Intel](https://en.wikipedia.org/wiki/X86-64) architecture 🏗️🐳.
 
 ```bash
 make build-selenium-intel 
@@ -91,7 +92,6 @@ You can achieve the same by building and running a Docker image based on the [AR
 
 ```bash
 make build-selenium-arm
-make run-tests-arm
 ```
 
 Then simply initiate the tests 🚀
@@ -104,4 +104,4 @@ You can also use it to execute a test with a custom docker [entrypoint](https://
 
 ```bash
 make run-tests-with-entrypoint
-````
+```
