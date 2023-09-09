@@ -44,6 +44,7 @@ build-$(1):	##  🛠️      Build docker image (eg. make build-selenium-intel-v
 endef
 
 # Call the build_platform_target function for each platform
+$(eval $(call build_platform_target,debian-intel,Dockerfile.intel,linux/amd64))
 $(eval $(call build_platform_target,selenium-intel-venv,Dockerfile.selenium.intel.venv,linux/amd64))
 $(eval $(call build_platform_target,selenium-intel,Dockerfile.selenium.intel,linux/amd64))
 $(eval $(call build_platform_target,selenium-arm-venv,Dockerfile.selenium.arm.venv,linux/arm64))
