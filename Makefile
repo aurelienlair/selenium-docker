@@ -33,7 +33,7 @@ RUN_TESTS_OPTIONS = \
 .PHONY: bash echo-requirements firefox-version
 
 define build_platform_target
-build-$(1):	##  🛠️      Build docker image (eg. make build-selenium-intel-venv, make build-selenium-intel, make build-selenium-arm-venv, make build-selenium-arm)
+build-$(1):	##  🛠️      Build docker image (eg. make build-debian-intel, build-selenium-intel-venv, make build-selenium-intel, make build-selenium-arm-venv, make build-selenium-arm)
 	@echo "🔨 Building docker image for `$(1)` using file `$(2)` for platform `$(3)`"
 	docker build \
 		$(COMMON_BUILD_ARGS) \
